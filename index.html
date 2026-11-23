@@ -194,12 +194,38 @@ details ul{margin:0 0 8px}
   details > :not(summary){display:block!important}
 }
 
+/* ---------- collapsible contents ---------- */
+.toc .row{display:flex;align-items:center;gap:2px}
+.toc .row a{flex:1}
+.toc .tgl{flex:none;width:28px;height:28px;border:0;background:none;border-radius:6px;cursor:pointer;display:grid;place-items:center;color:var(--ink-3)}
+.toc .tgl:hover{background:var(--bg);color:var(--accent-ink)}
+.toc .tgl::before{content:"";width:6px;height:6px;border-right:2px solid currentColor;border-bottom:2px solid currentColor;transform:rotate(-45deg);transition:transform .15s}
+.toc li.group.open > .row .tgl::before{transform:rotate(45deg)}
+.toc li.group > ul{display:none;margin:2px 0 6px}
+.toc li.group.open > ul{display:block}
+
+/* ---------- FAQ access + panel ---------- */
+.head-row{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.head-row .lede{flex:1 1 420px}
+.btn-faq{font-weight:600;color:var(--accent-ink);border-color:var(--accent);background:var(--accent-soft);padding:8px 16px;font-size:14px}
+.btn-faq:hover{background:var(--surface)}
+.tools .btn-faq{padding:6px 12px;font-size:13px}
+.scrim2{position:fixed;inset:0;background:rgba(42,39,51,.28);z-index:70;display:none}
+.scrim2.open{display:block}
+.panel{position:fixed;top:0;right:0;bottom:0;width:min(520px,94vw);z-index:71;background:var(--surface);box-shadow:-8px 0 30px rgba(84,71,154,.14);display:flex;flex-direction:column;transform:translateX(100%);transition:transform .18s ease-out}
+.panel.open{transform:none}
+.panel[hidden]{display:none}
+.panel-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:18px 22px;border-bottom:1px solid var(--line)}
+.panel-head h2{margin:0;font-size:21px;font-weight:650;display:flex;align-items:center;gap:10px}
+.panel-body{overflow-y:auto;padding:10px 22px 40px}
+.panel .faq details{margin:10px 0}
+
 </style>
 </head>
 <body>
 <div class="topbar">
   <span class="brand">Sidekick rater guide</span>
-  <button class="btn" id="menuBtn" type="button" aria-label="Open contents and search">Contents</button>
+  <span style="display:flex;gap:8px"><button class="btn btn-faq" type="button" data-open-faq>FAQs</button><button class="btn" id="menuBtn" type="button" aria-label="Open contents and search">Contents</button></span>
 </div>
 <div class="scrim"></div>
 <div class="layout">
@@ -211,14 +237,14 @@ details ul{margin:0 0 8px}
       <span class="kbd" aria-hidden="true">/</span>
       <div id="results" class="results" aria-live="polite"></div>
     </div>
-    <div class="tools"><button class="btn" id="expandAll" type="button">Expand all</button></div>
+    <div class="tools"><button class="btn btn-faq" type="button" data-open-faq>FAQs</button><button class="btn" id="expandAll" type="button">Expand all</button></div>
     <nav id="toc" class="toc" aria-label="Contents"></nav>
   </aside>
   <main>
     <div class="content">
 <header class="doc-head" id="top">
   <h1>Sidekick rater guide</h1>
-  <p class="lede">Browser AI Mode Evaluation. This guide combines the <em>Rater Instructions</em> and the <em>Annotator Cheat Sheet</em> in one place.</p>
+  <div class="head-row"><p class="lede">Browser AI Mode Evaluation. This guide combines the <em>Rater Instructions</em> and the <em>Annotator Cheat Sheet</em> in one place.</p><button class="btn btn-faq" type="button" data-open-faq>FAQs</button></div>
   <ul class="legend" aria-label="Labels used in this guide">
     <li><span class="tag tag-cs">Cheat sheet</span> Text from the Annotator Cheat Sheet. Unlabelled text is from the Rater Instructions.</li>
     <li><span class="tag tag-rule">Rule</span> Must be followed.</li>
@@ -805,24 +831,18 @@ details ul{margin:0 0 8px}
       </li>
     </ol>
   </article>
-
-  <article id="setup-others" class="q" data-title="Other tools">
-    <h3>Other tools</h3>
-    <p>Setup steps for these tools open in the Setup instructions tab of the Rater Instructions document.</p>
-    <ul class="ext-list">
-      <li><a href="https://docs.google.com/document/d/1bHzR5cNZ3Ye4kYQnbC4dEuyblXIxKifeI85wudX8HEc/edit?tab=t.23j7tpar1j33#heading=h.sb1udgv42ryy" target="_blank" rel="noopener">2. Edge Copilot</a></li>
-      <li><a href="https://docs.google.com/document/d/1bHzR5cNZ3Ye4kYQnbC4dEuyblXIxKifeI85wudX8HEc/edit?tab=t.23j7tpar1j33#heading=h.xlyzo47jeazk" target="_blank" rel="noopener">3. Perplexity in Comet</a></li>
-      <li><a href="https://docs.google.com/document/d/1bHzR5cNZ3Ye4kYQnbC4dEuyblXIxKifeI85wudX8HEc/edit?tab=t.23j7tpar1j33#heading=h.qgwowcchdcto" target="_blank" rel="noopener">4. AIM in Chrome</a></li>
-      <li><a href="https://docs.google.com/document/d/1bHzR5cNZ3Ye4kYQnbC4dEuyblXIxKifeI85wudX8HEc/edit?tab=t.23j7tpar1j33#heading=h.5wam9srqk9hw" target="_blank" rel="noopener">5. Claude Extension</a></li>
-      <li><a href="https://docs.google.com/document/d/1bHzR5cNZ3Ye4kYQnbC4dEuyblXIxKifeI85wudX8HEc/edit?tab=t.23j7tpar1j33#heading=h.luzvwhp2ezf1" target="_blank" rel="noopener">6. ChatGPT Extension</a></li>
-    </ul>
-  </article>
 </section>
 
-<!-- ===================== FAQ (CS) ===================== -->
-<section id="faq" class="sec" data-title="FAQs">
-  <h2>FAQs <span class="tag tag-cs">Cheat sheet</span></h2>
-  <div class="faq">
+
+
+    </div>
+  </main>
+</div>
+<div class="scrim2" data-close-faq></div>
+<aside id="faqPanel" class="panel" role="dialog" aria-modal="true" aria-labelledby="faqTitle" hidden>
+  <div class="panel-head"><h2 id="faqTitle">FAQs <span class="tag tag-cs">Cheat sheet</span></h2><button class="btn" type="button" data-close-faq>Close</button></div>
+  <div class="panel-body" id="faq" data-title="FAQs">
+<div class="faq">
     <details><summary>The prompt mentions a file or earlier chat I cannot see. What should I do?</summary><p>Run it as written and leave that context empty. In <a href="#q2" class="ilink qref">Q2</a>, it counts as missing.</p></details>
     <details><summary>The task has no link. Where do I open the assistant?</summary><p>In a fresh tab on the browser home page (for example, the Chrome home page). See <a href="#opening" class="ilink">Opening the task</a>.</p></details>
     <details><summary>The assistant asked me a question. Should I answer it?</summary><p>No. Rate the first response as it is.</p></details>
@@ -833,12 +853,9 @@ details ul{margin:0 0 8px}
     <details><summary>How is my work checked?</summary><p>Every task is QC-reviewed. Ratings must match the score tables, so follow them closely.</p></details>
     <details><summary>How am I paid?</summary><p>$15/hour for every QC-approved task.</p></details>
   </div>
-</section>
 
-
-    </div>
-  </main>
-</div>
+  </div>
+</aside>
 <button id="backBtn" type="button">Back to where you were</button>
 <div id="tooltip" role="tooltip"></div>
 <div id="toast" role="status" aria-live="polite"></div>
@@ -871,25 +888,38 @@ details ul{margin:0 0 8px}
   }
   function baseUrl() { return location.href.split("#")[0]; }
 
-  /* ---------- build table of contents ---------- */
-  var toc = $("#toc"), blocks = $$(".content [data-title]");
+  /* ---------- build table of contents (collapsible groups) ---------- */
+  var toc = $("#toc"), blocks = $$(".content [data-title], #faq[data-title]");
   var tocUl = document.createElement("ul");
+  function setGroup(li, open) {
+    li.classList.toggle("open", open);
+    var t = $(".tgl", li); if (t) t.setAttribute("aria-expanded", open ? "true" : "false");
+  }
+  function openOnly(li) {
+    $$("li.group", toc).forEach(function (g) { setGroup(g, g === li); });
+  }
   $$(".content > section.sec").forEach(function (sec) {
     var li = document.createElement("li");
+    var row = document.createElement("div"); row.className = "row";
     var a = document.createElement("a");
     a.href = "#" + sec.id; a.textContent = sec.getAttribute("data-title");
-    
-    li.appendChild(a);
+    row.appendChild(a); li.appendChild(row);
     var kids = $$(":scope > article[data-title]", sec);
     if (sec.id === "part2") kids.splice(1, 0, $("#screenshot-note"));
     if (kids.length) {
-      var ul = document.createElement("ul");
+      li.className = "group";
+      var sub = document.createElement("ul"); sub.id = "toc-" + sec.id;
       kids.forEach(function (k) {
         var cl = document.createElement("li"), ca = document.createElement("a");
         ca.href = "#" + k.id; ca.textContent = k.getAttribute("data-title");
-        cl.appendChild(ca); ul.appendChild(cl);
+        cl.appendChild(ca); sub.appendChild(cl);
       });
-      li.appendChild(ul);
+      var t = document.createElement("button");
+      t.type = "button"; t.className = "tgl"; t.setAttribute("aria-expanded", "false");
+      t.setAttribute("aria-controls", sub.id); t.setAttribute("aria-label", "Show or hide " + sec.getAttribute("data-title"));
+      t.addEventListener("click", function () { setGroup(li, !li.classList.contains("open")); });
+      row.appendChild(t); li.appendChild(sub);
+      a.addEventListener("click", function () { openOnly(li); });
     }
     tocUl.appendChild(li);
   });
@@ -901,6 +931,23 @@ details ul{margin:0 0 8px}
   $("#menuBtn").addEventListener("click", function () { side.classList.add("open"); scrim.classList.add("open"); $("#q").focus(); });
   scrim.addEventListener("click", closeDrawer);
   toc.addEventListener("click", function (e) { if (e.target.closest("a")) closeDrawer(); });
+
+  /* ---------- FAQ panel ---------- */
+  var faqPanel = $("#faqPanel"), scrim2 = $(".scrim2"), faqReturn = null;
+  function openFaq() {
+    faqReturn = document.activeElement; closeDrawer();
+    faqPanel.hidden = false; scrim2.classList.add("open");
+    requestAnimationFrame(function () { faqPanel.classList.add("open"); });
+    $("[data-close-faq].btn", faqPanel).focus();
+  }
+  function closeFaq(keepFocus) {
+    faqPanel.classList.remove("open"); scrim2.classList.remove("open");
+    setTimeout(function () { faqPanel.hidden = true; }, 180);
+    if (!keepFocus && faqReturn && faqReturn.focus) faqReturn.focus();
+  }
+  $$("[data-open-faq]").forEach(function (b) { b.addEventListener("click", openFaq); });
+  $$("[data-close-faq]").forEach(function (b) { b.addEventListener("click", function () { closeFaq(); }); });
+  document.addEventListener("keydown", function (e) { if (e.key === "Escape" && !faqPanel.hidden) closeFaq(); });
 
   /* ---------- scrollspy ---------- */
   var tocLinks = {};
@@ -920,6 +967,8 @@ details ul{margin:0 0 8px}
       $$("a.active", toc).forEach(function (a) { a.classList.remove("active"); });
       if (best && tocLinks[best.id]) {
         tocLinks[best.id].classList.add("active");
+        var g = tocLinks[best.id].closest("li.group");
+        if (g && !g.classList.contains("open")) openOnly(g);
         var parentSec = best.closest("section.sec");
         if (parentSec && parentSec !== best && tocLinks[parentSec.id]) tocLinks[parentSec.id].classList.add("active");
       }
@@ -993,10 +1042,12 @@ details ul{margin:0 0 8px}
     flash(el);
   }
   document.addEventListener("click", function (e) {
-    var a = e.target.closest('.content a[href^="#"]');
+    var a = e.target.closest('.content a[href^="#"], #faqPanel a[href^="#"]');
     if (!a) return;
     var id = a.getAttribute("href").slice(1); if (!id || !document.getElementById(id)) return;
-    e.preventDefault(); hideTip(); goTo(id, true);
+    e.preventDefault(); hideTip();
+    if (a.closest("#faqPanel")) { closeFaq(true); setTimeout(function () { goTo(id, true); }, 190); }
+    else goTo(id, true);
   });
   backBtn.addEventListener("click", function () {
     var y = stack.pop();
@@ -1007,7 +1058,7 @@ details ul{margin:0 0 8px}
   /* ---------- expand / collapse all ---------- */
   var expBtn = $("#expandAll");
   expBtn.addEventListener("click", function () {
-    var all = $$(".content details"), anyClosed = all.some(function (d) { return !d.open; });
+    var all = $$(".content details, #faqPanel details"), anyClosed = all.some(function (d) { return !d.open; });
     all.forEach(function (d) { d.open = anyClosed; });
     expBtn.textContent = anyClosed ? "Collapse all" : "Expand all";
   });
@@ -1079,8 +1130,15 @@ details ul{margin:0 0 8px}
     var q = input.value.trim();
     clearMarks();
     $$("details", r.it.el).forEach(function (d) { if (d.closest("[data-title]") === r.it.el && new RegExp(reEsc(q), "i").test(d.textContent)) d.open = true; });
+    var inFaq = !!r.it.el.closest("#faqPanel");
     var first = markIn(r.it.el, q);
     closeDrawer();
+    if (inFaq) {
+      if (first) { var fd = first.closest("details"); if (fd) fd.open = true; }
+      openFaq();
+      setTimeout(function () { (first || r.it.el).scrollIntoView({ block: "center" }); }, 60);
+      return;
+    }
     stack.push(window.scrollY); backBtn.classList.add("show");
     (first || r.it.el).scrollIntoView({ block: "center" });
     history.replaceState(null, "", "#" + r.it.el.id);
@@ -1104,7 +1162,8 @@ details ul{margin:0 0 8px}
   });
 
   /* ---------- open target from URL on load ---------- */
-  if (location.hash.length > 1) {
+  if (location.hash === "#faq") { openFaq(); }
+  else if (location.hash.length > 1) {
     var tgt = document.getElementById(location.hash.slice(1));
     if (tgt) { revealTarget(tgt); setTimeout(function () { tgt.scrollIntoView({ block: "start" }); }, 30); }
   }
